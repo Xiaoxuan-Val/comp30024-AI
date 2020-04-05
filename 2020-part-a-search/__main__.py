@@ -15,7 +15,7 @@ def main():
     #format new dictionary with (x, y) tuples as keys, " token number + w/b" as value.
     board_dict = {}
     blacktoken_dict = {}
-    whitetoken_list = []
+    whitetoken_dict = {}
     position_dict = {}
     goal_list = []
     for key in data:
@@ -24,7 +24,7 @@ def main():
                 coords = (token[1],token[2])
                 value = 'w' + str(token[0])
                 board_dict.update({coords:value})
-                whitetoken_list.append(coords)
+                whitetoken_dict.update({coords:value})
         else:
             for token in data[key]:
                 coords = (token[1],token[2])
@@ -47,7 +47,7 @@ def main():
     
     #edit 5/4 23:43 
     #for each goal point, evaluate its nearest white token and generate a path
-    temp_wtlist = whitetoken_list
+    temp_wtlist = list(whitetoken_dict.keys())
     for g in goal_list:
         wt =[]
         min_dist = 1000
@@ -223,18 +223,17 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
         #print(path_list)
           
     return path_list
-
+    
 #manhattan distance 
 def distance_evaluation(pos0,pos1):
     return abs(pos1[0]-pos0[0])+abs(pos1[1]-pos0[1])
 
-#given a list of points in a path, print it as a sequence of moves [UNFINISHED!HAVEN'T DEAL WITH STACK YET]
+#given a list of points in a path, print it as a sequence of moves [unfinished]
 def print_path(path_list):
     for i in range(0,len(path_list)-1):
         print_move(1,path_list[i][0],path_list[i][1],path_list[i+1][0],path_list[i+1][1])
     print_boom(path_list[-1][0],path_list[-1][1])
     return
-
 
 if __name__ == '__main__':
     main()
