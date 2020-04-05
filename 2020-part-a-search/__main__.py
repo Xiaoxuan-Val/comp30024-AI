@@ -93,12 +93,14 @@ def check_surrounding(blacktoken_dict, point):
 
 #this function is used to find destination square list
 def search_goal_square(board_dict,blacktoken_dict):
-    best_point = (0 ,0)
-    best_count = 0
-    n = 0
+    
     goal_list = []
     
     while len(blacktoken_dict) != 0: 
+        
+        best_point = (0 ,0)
+        best_count = 0
+        n = 0
         
         for p in board_dict:
             if board_dict[p] == '0':
@@ -113,8 +115,12 @@ def search_goal_square(board_dict,blacktoken_dict):
         result = check_surrounding(blacktoken_dict, best_point)
         covered_blacktoken = result[1]
         
+        #print(best_point)
+        
         for p in covered_blacktoken:
             del blacktoken_dict[p]
+            
+        #print(blacktoken_dict)
     
     return goal_list
 
