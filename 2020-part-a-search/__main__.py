@@ -42,9 +42,27 @@ def main():
     print_board(board_dict, message="", unicode=True, compact=True)
     goal_list = search_goal_square(board_dict, blacktoken_dict)
     #print("goal list")
-    print(goal_list)
-    print(path_search(whitetoken_list[0], goal_list[0], blacktoken_dict))
+    #print(goal_list)
+    #print(path_search(whitetoken_list[0], goal_list[0], blacktoken_dict))
     
+    #edit 5/4 23:43 
+    #for each goal point, evaluate its nearest white token and generate a path
+    temp_wtlist = whitetoken_list
+    for g in goal_list:
+        wt =[]
+        min_dist = 1000
+        for wti in temp_wtlist:
+            temp_d = distance_evaluation(g, wti)
+            if temp_d < min_dist:
+                min_dist = temp_d
+                wt = wti
+        temp_wtlist.remove(wt)
+        #generate path search between this goal point and the white token
+        print(wt)
+        path_result = path_search(wt,g,blacktoken_dict)
+        print(path_result)
+        #print the result
+        print_path(path_result)
 
 
 #this function is used to count relative black token of a given position. 
@@ -206,6 +224,16 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
           
     return path_list
 
+#manhattan distance 
+def distance_evaluation(pos0,pos1):
+    return abs(pos1[0]-pos0[0])+abs(pos1[1]-pos0[1])
+
+#given a list of points in a path, print it as a sequence of moves [unfinished]
+def print_path(path_list):
+    for i in range(0,len(path_list)-1):
+        print_move(1,path_list[i][0],path_list[i][1],path_list[i+1][0],path_list[i+1][1])
+    print_boom(path_list[-1][0],path_list[-1][1])
+    return
 
 
 if __name__ == '__main__':
