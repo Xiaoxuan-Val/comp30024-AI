@@ -32,14 +32,13 @@ def main():
     for xy in coords:
         if xy not in board_dict:
             board_dict.update({xy:'0'})
-            position_dict.update({xy:'0'})  
             
     
                         
     print(board_dict)
     print(blacktoken_dict)
     print_board(board_dict, message="", unicode=True, compact=True)
-    print(check_surrounding(blacktoken_dict, (2, 3)))
+    print(search_goal_square(board_dict, blacktoken_dict))
     
 
 
@@ -88,7 +87,36 @@ def check_surrounding(blacktoken_dict, point):
     for p in final_list:
         blacktoken_number += int(blacktoken_dict[p][1:])
         
-    return blacktoken_number 
+    return (blacktoken_number, final_list)
+
+
+
+#this function is used to find destination square list
+def search_goal_square(board_dict,blacktoken_dict):
+    best_point = (0 ,0)
+    best_count = 0
+    n = 0
+    goal_list = []
+    
+    while len(blacktoken_dict) != 0: 
+        
+        for p in board_dict:
+            if board_dict[p] == '0':
+                temp_result = check_surrounding(blacktoken_dict, p)
+                n = temp_result[0]
+                if n > best_count:
+                    best_count = n
+                    best_point = p
+        
+        goal_list.append(best_point)
+        
+        result = check_surrounding(blacktoken_dict, best_point)
+        covered_blacktoken = result[1]
+        
+        for p in covered_blacktoken:
+            del blacktoken_dict[p]
+    
+    return goal_list
 
 
 if __name__ == '__main__':
