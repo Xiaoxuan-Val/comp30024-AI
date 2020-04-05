@@ -228,7 +228,7 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
 def distance_evaluation(pos0,pos1):
     return abs(pos1[0]-pos0[0])+abs(pos1[1]-pos0[1])
 
-#given a list of points in a path, print it as a sequence of moves [unfinished]
+#given a list of points in a path, print it as a sequence of moves [UNFINISHED!HAVEN'T DEAL WITH STACK YET]
 def print_path(path_list):
     for i in range(0,len(path_list)-1):
         print_move(1,path_list[i][0],path_list[i][1],path_list[i+1][0],path_list[i+1][1])
