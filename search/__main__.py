@@ -33,10 +33,8 @@ def main():
     for xy in coords:
         if xy not in board_dict:
             board_dict.update({xy:'0'})
-            
-                        
-    
-    goal_list = search_goal_square(board_dict, blacktoken_dict)
+                               
+    goal_list = search_goal_square(board_dict, blacktoken_dict, whitetoken_dict)
     
     #for each goal point, evaluate its nearest white token and generate a path
     temp_wtlist = list(whitetoken_dict.keys())
@@ -108,9 +106,10 @@ def check_surrounding(blacktoken_dict, point):
 
 
 #this function is used to find destination square list
-def search_goal_square(board_dict,blacktoken_dict):
-    blacktoken_dict_copy = blacktoken_dict.copy()
+def search_goal_square(board_dict,blacktoken_dict, whitetoken_dict):
     
+    blacktoken_dict_copy = blacktoken_dict.copy()
+    board_dict_copy = board_dict.copy()
     goal_list = []
     
     while len(blacktoken_dict_copy) != 0: 
@@ -124,8 +123,14 @@ def search_goal_square(board_dict,blacktoken_dict):
                 temp_result = check_surrounding(blacktoken_dict_copy, p)
                 n = temp_result[0]
                 if n > best_count:
-                    best_count = n
-                    best_point = p
+                    #check whether reachable for white tokens
+                    reachable_flag = 0
+                    for wt in whitetoken_dict:
+                        if (path_search(wt, p, blacktoken_dict_copy)!= []):
+                            reachable_flag = 1
+                    if reachable_flag == 1:
+                        best_count = n
+                        best_point = p 
         
         goal_list.append(best_point)
         
@@ -150,7 +155,6 @@ def get_dist(g_dist, curr_pos, goal_pos):
 
 #find path to a position for a white token, using A star search
 def path_search(whitetoken, goal_position, blacktoken_dict):
-
     
     #using a list to record position we have already reached
     path_list = [whitetoken]
@@ -161,8 +165,7 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
     
     
     while path_list[-1]!= goal_position :
-        
-        
+    
         #current location
         temp_pos = path_list[-1]
         
@@ -192,14 +195,14 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
         #if no possible next position
         if len(possible_pos) == 0:
             failedposition_list.append(path_list.pop())
+             #no solution path
+            if len(path_list) == 0:
+                return []
             continue
         #sort possible next positions by estimated total cost f
         next_point = possible_pos[0]
         min_dist = get_dist(g_dist, next_point, goal_position)
         for p in possible_pos:
-            #for debug
-            #print(p)
-            #print(get_dist(g_dist, p, goal_position))
             if get_dist(g_dist, p, goal_position) < min_dist:
                 next_point = p
                 min_dist = get_dist(g_dist, p, goal_position)
