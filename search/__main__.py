@@ -12,7 +12,6 @@ def main():
     board_dict = {}
     blacktoken_dict = {}
     whitetoken_dict = {}
-    position_dict = {}
     goal_list = []
     
     #format new dictionary with (x, y) tuples as keys, " token number + w/b" as value.
