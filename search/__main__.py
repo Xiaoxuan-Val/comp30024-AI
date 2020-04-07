@@ -1,7 +1,7 @@
 import sys
 import json
 
-from util import print_move, print_boom, print_board
+from search.util import print_move, print_boom, print_board
 
 
 def main():
@@ -9,15 +9,13 @@ def main():
     with open(sys.argv[1]) as file:
         data = json.load(file)
         
-    # TODO: find and print winning action sequence
-    
-    #load board
-    #format new dictionary with (x, y) tuples as keys, " token number + w/b" as value.
     board_dict = {}
     blacktoken_dict = {}
     whitetoken_dict = {}
     position_dict = {}
     goal_list = []
+    
+    #format new dictionary with (x, y) tuples as keys, " token number + w/b" as value.
     for key in data:
         if key == 'white':
             for token in data[key]:
@@ -36,16 +34,10 @@ def main():
         if xy not in board_dict:
             board_dict.update({xy:'0'})
             
-    #for debug print   
                         
-    #print(blacktoken_dict)
-    print_board(board_dict, message="", unicode=True, compact=True)
-    goal_list = search_goal_square(board_dict, blacktoken_dict)
-    #print("goal list")
-    #print(goal_list)
-    #print(path_search(whitetoken_list[0], goal_list[0], blacktoken_dict))
     
-    #edit 5/4 23:43 
+    goal_list = search_goal_square(board_dict, blacktoken_dict)
+    
     #for each goal point, evaluate its nearest white token and generate a path
     temp_wtlist = list(whitetoken_dict.keys())
     for g in goal_list:
@@ -57,12 +49,13 @@ def main():
                 min_dist = temp_d
                 wt = wti
         temp_wtlist.remove(wt)
+        
         #generate path search between this goal point and the white token
-        print(wt)
         path_result = path_search(wt,g,blacktoken_dict)
-        print(path_result)
+        
         #print the result
         print_path(path_result)
+
 
 
 #this function is used to count relative black token of a given position. 
@@ -139,12 +132,11 @@ def search_goal_square(board_dict,blacktoken_dict):
         result = check_surrounding(blacktoken_dict_copy, best_point)
         covered_blacktoken = result[1]
         
-        #print(best_point)
         
         for p in covered_blacktoken:
             del blacktoken_dict_copy[p]
             
-        #print(blacktoken_dict)
+
     
     return goal_list
 
@@ -169,10 +161,6 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
     
     
     while path_list[-1]!= goal_position :
-        
-        #debug print
-        #print("current point")
-        #print(path_list[-1])
         
         
         #current location
@@ -219,12 +207,10 @@ def path_search(whitetoken, goal_position, blacktoken_dict):
         path_list.append(next_point)
         path_dict.update({next_point:g_dist})
         
-        #debug
-        #print(path_list)
-          
+        
     return path_list
     
-#manhattan distance 
+#Manhattan distance 
 def distance_evaluation(pos0,pos1):
     return abs(pos1[0]-pos0[0])+abs(pos1[1]-pos0[1])
 
