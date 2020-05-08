@@ -2,6 +2,7 @@
 class Player:
     gamestate = {}
     colour = 'none'
+    enemy_colour = 'none'
     def __init__(self, colour):
         """
         This method is called once at the beginning of the game to initialise
@@ -15,6 +16,10 @@ class Player:
         """
         # TODO: Set up state representation.
         self.colour = colour
+        if colour == 'white':
+            self.enemy_colour = 'black'
+        else:
+            self.enemy_colour = 'white'
         initial_white = [(0,0),(1,0),(3,0),(4,0),(6,0),(7,0),
                          (0,1),(1,1),(3,1),(4,1),(6,1),(7,1)]
         initial_black = [(0,6),(1,6),(3,6),(4,6),(6,6),(7,6),
@@ -60,3 +65,14 @@ class Player:
         against the game rules).
         """
         # TODO: Update state representation in response to action.
+    
+    def evaluation(self,state):
+        selftoken_num = 0
+        enemytoken_num = 0
+        #count tokens
+        for valuepair in state.values():
+            if valuepair[0] == self.colour:
+                selftoken_num += valuepair[1]
+            elif valuepair[0] == self.enemy_colour:
+                enemytoken_num += valuepair[1]
+        return 100*selftoken_num - 100*enemytoken_num
