@@ -3,10 +3,10 @@ Driver program to instantiate two Player classes
 and begin a game between them.
 """
 
-from log import StarLog
-from game import play, IllegalActionException
-from player import PlayerWrapper, ResourceLimitException, set_space_line
-from options import get_options
+from referee.log import StarLog
+from referee.game import play, IllegalActionException
+from referee.player import PlayerWrapper, ResourceLimitException, set_space_line
+from referee.options import get_options
 
 def main():
     # Parse command-line options into a namespace for use throughout this

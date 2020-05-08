@@ -64,7 +64,7 @@ optional arguments:
 
 import sys
 import argparse
-from game import GAME_NAME, COLOURS, NUM_PLAYERS
+from referee.game import GAME_NAME, COLOURS, NUM_PLAYERS
 
 # Program information:
 PROGRAM = "referee"

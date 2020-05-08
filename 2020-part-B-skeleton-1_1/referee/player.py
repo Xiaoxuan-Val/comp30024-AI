@@ -8,7 +8,7 @@ import gc
 import time
 import importlib
 
-from game import NUM_PLAYERS
+from referee.game import NUM_PLAYERS
 
 class PlayerWrapper:
     """
