@@ -134,10 +134,28 @@ class ExamplePlayer:
     
     # given a state and color of a player, 
     # return all possible legal moves the player can do on next turn
-    def possible_moves(colour,state):
-        #if game ends at that state, no need to move anymore
+    def possible_actions(colour,state):
+        #if game ends at this state, no need to move anymore
         if isGameEnd(state):
             return []
-        possiblemoves = []
+        
+        possibleactions = []
         #loop through all blocks with tokens of this player's side
-        # UNFINISHED
+        for block in state:
+            coor_x = block[0]
+            coor_y = block[1]
+            if state[block][0] == colour:
+                # There're tokens of the player's side on this block
+                n_tokens = state[block][1] # the num of tokens on the location
+                for n in range(1,n_tokens+1):
+                    # move n tokens from the stack
+                    possible_goals = [(coor_x-n,coor_y),(coor_x+n,coor_y),
+                                      (coor_x,coor_y-n),(coor_x,coor_y+n)]
+                    for goal in possible_goals:
+                        if goal[0]>=0 and goal[0]<=7 and goal[1]>=0 and goal[1]<=7 and (state[goal][0] == colour or state[goal][0] == 'none'):
+                            possibleactions.append(("MOVE",n,block,goal))
+                possibleactions.append(("BOOM",block))
+        return possibleactions
+                    
+                    
+                
