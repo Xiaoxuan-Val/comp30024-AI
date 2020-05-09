@@ -31,12 +31,6 @@ class ExamplePlayer:
         possible_actions = state.legal_actions()
         shuffle(possible_actions)
         
-        if current_depth ==self.max_depth or state.is_terminal():
-        #if current_depth ==self.max_depth:
-            score = 0
-            score = self.evaluation(state)
-            return score, action_target
-        
         
         best_value = float('-inf') if is_max_turn else float('inf')
         
@@ -44,6 +38,12 @@ class ExamplePlayer:
         for action in possible_actions:
             
             new_state = state.apply_action(action)
+            
+            if current_depth ==self.max_depth or state.is_terminal():
+                action_target = action
+                score = 0
+                score = self.evaluation(state)
+                return score, action_target
             
             eval_child, action_child = self._minimax(current_depth+1,new_state,not is_max_turn, alpha, beta)
 
@@ -60,6 +60,8 @@ class ExamplePlayer:
                 beta = min(beta, best_value)
                 if beta <= alpha:
                     break
+                
+        
 
         return best_value, action_target
         
