@@ -1,5 +1,4 @@
-
-class Player:
+class ExamplePlayer:
     gamestate = {}
     colour = 'none'
     enemy_colour = 'none'
@@ -76,3 +75,17 @@ class Player:
             elif valuepair[0] == self.enemy_colour:
                 enemytoken_num += valuepair[1]
         return 100*selftoken_num - 100*enemytoken_num
+    
+    def isGameEnd(state):
+        whitetoken_num = 0
+        blacktoken_num = 0
+        #count tokens
+        for valuepair in state.values():
+            if valuepair[0] == 'white':
+                whitetoken_num += valuepair[1]
+            elif valuepair[0] == 'black':
+                blacktoken_num += valuepair[1]
+        
+        if whitetoken_num == 0 or blacktoken_num == 0:
+            return True
+        return False
