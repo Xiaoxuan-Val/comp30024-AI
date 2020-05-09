@@ -13,7 +13,7 @@ class ExamplePlayer:
         program will play as (White or Black). The value will be one of the 
         strings "white" or "black" correspondingly.
         """
-        # TODO: Set up state representation.
+        # Set up state representation.
         self.colour = colour
         if colour == 'white':
             self.enemy_colour = 'black'
@@ -63,7 +63,8 @@ class ExamplePlayer:
         for the player colour (your method does not need to validate the action
         against the game rules).
         """
-        # TODO: Update state representation in response to action.
+        # Update state representation in response to action.
+        self.gamestate = apply_action(self.gamestate,action)
     
     # Since there are initialliy 12 tokens of each side on the board, 
     # the evaluation score will be in between 0 and 12
