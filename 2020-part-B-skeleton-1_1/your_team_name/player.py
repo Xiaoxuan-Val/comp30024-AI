@@ -65,6 +65,8 @@ class ExamplePlayer:
         """
         # TODO: Update state representation in response to action.
     
+    # Since there are initialliy 12 tokens of each side on the board, 
+    # the evaluation score will be in between 0 and 12
     def evaluation(self,state):
         selftoken_num = 0
         enemytoken_num = 0
@@ -74,7 +76,7 @@ class ExamplePlayer:
                 selftoken_num += valuepair[1]
             elif valuepair[0] == self.enemy_colour:
                 enemytoken_num += valuepair[1]
-        return 100*selftoken_num - 100*enemytoken_num
+        return selftoken_num - enemytoken_num
     
     def isGameEnd(state):
         whitetoken_num = 0
@@ -89,3 +91,53 @@ class ExamplePlayer:
         if whitetoken_num == 0 or blacktoken_num == 0:
             return True
         return False
+    
+    # given  a state and an action (in the for of a tuple as the assignment spec),
+    # applies the action on the state and return the result state
+    # (the input action is assumed to be a legal action)
+    def apply_action(state,action):
+        resultstate = state
+        if action[0] == "MOVE":
+            # move action
+            curr_loc = resultstate[action[2]]
+            if curr_loc[1] - action[1] == 0:
+                resultstate[action[2]] = ['none',0]
+            else:
+                resultstate[action[2]] = [curr_loc[0],curr_loc[1] - action[1]]
+            goal_loc = resultstate[action[3]]
+            resultstate[action[3]] = [goal_loc[0],goal_loc[1] + action[1]]
+        if action[0] == "BOOM":
+            # boom action
+            boom_loc = resultstate[action[1]]
+            resulestate = recursive_boom(state,boom_loc)
+        
+        return resultstate
+    
+    # a recursive function used to apply boom action to a given point on the state
+    def recursive_boom(state,location):
+        # get the list of legal points within 3x3 area of the input location
+        surroundings = [(-1,-1),(-1,0),(-1,1),(0,-1),(0,1),(1,-1),(1,0),(1,1)]
+        slist = []
+        for s in surroundings:
+            newpoint = (location[0]+s[0],location[1]+s[1])
+            if newpoint[0]>=0 and newpoint[0]<=7 and newpoint[1]>=0 and newpoint[1]<=7:
+                result.append(newpoint)
+        
+        newstate = state
+        # remove tokens on the centre of boom
+        newstate[location] = ['none',0]
+        # remove tokens in the area of boom
+        for p in slist:
+            if newstate[p][1] > 0:
+                newstate = recursive_boom(newstate,p)
+        return newstate
+    
+    # given a state and color of a player, 
+    # return all possible legal moves the player can do on next turn
+    def possible_moves(colour,state):
+        #if game ends at that state, no need to move anymore
+        if isGameEnd(state):
+            return []
+        possiblemoves = []
+        #loop through all blocks with tokens of this player's side
+        # UNFINISHED
