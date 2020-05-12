@@ -34,12 +34,6 @@ class ExamplePlayer:
         
         best_value = float('-inf') if is_max_turn else float('inf')
         
-        #print("---------------------")
-        #print()
-        #print(state.board.tokens)
-        #print()
-        #print(possible_actions)
-        #print("---------------------")
         
         
         
