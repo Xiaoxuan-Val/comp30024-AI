@@ -34,6 +34,14 @@ class ExamplePlayer:
         
         best_value = float('-inf') if is_max_turn else float('inf')
         
+        #print("---------------------")
+        #print()
+        #print(state.board.tokens)
+        #print()
+        #print(possible_actions)
+        #print("---------------------")
+        
+        
         
         for action in possible_actions:
             
@@ -161,12 +169,18 @@ class Board:
         else:
             if action[2] in self.tokens.keys():
                 self.tokens[action[2]] -= action[1]
+                if(self.tokens[action[2]]==0):
+                    self.tokens.pop(action[2])
+                
                 if (action[3] not in self.tokens.keys()):
                     self.tokens[action[3]] = action[1]
                 else:
                     self.tokens[action[3]] += action[1]
             else:
                 self.op_tokens[action[2]] -= action[1]
+                if(self.op_tokens[action[2]]==0):
+                    self.op_tokens.pop(action[2])
+                
                 if (action[3] not in self.op_tokens.keys()):
                     self.op_tokens[action[3]] = action[1]
                 else:
@@ -225,6 +239,9 @@ class State:
         else:
             
             new_state.board.tokens[action[2]] -= action[1]
+            if(new_state.board.tokens[action[2]]== 0):
+                new_state.board.tokens.pop(action[2])
+            
             if (action[3] not in new_state.board.tokens.keys()):
                 new_state.board.tokens[action[3]] = action[1]
             else:
